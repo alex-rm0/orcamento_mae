@@ -4,7 +4,7 @@ import historico_faturas
 
 def main():
     st.title("Aplicação Orçamento - Contas Mãe")
-    st.image("caminho_para_sua_imagem/foto_benedita.png", use_column_width=True)
+    st.image("foto_benedita.png", use_column_width=True)
 
     menu = st.sidebar.selectbox(
         "Escolha uma opção:",
