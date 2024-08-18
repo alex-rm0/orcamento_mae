@@ -1,6 +1,6 @@
 import streamlit as st
-import gere_faturas_streamlit as gere_faturas
-import historico_faturas_streamlit as historico_faturas
+import gere_faturas
+import historico_faturas
 
 def main():
     st.title("Aplicação Orçamento - Contas Mãe")
