@@ -28,6 +28,8 @@ def insert():
             st.error("Por favor, preencha todos os campos.")
 
     st.subheader("Remover Fatura")
+    
+    # Lê e processa o arquivo de faturas
     faturas_remover = []
     with open("faturas.txt", "r") as file:
         for line in file:
@@ -44,14 +46,15 @@ def insert():
     df = pd.DataFrame(faturas_remover)
 
     if not df.empty:
-        # Adiciona uma caixa de seleção para cada fatura
-        df["Selecionar"] = df.apply(lambda row: st.checkbox("", key=row["Linha"]), axis=1)
+        # Adiciona uma coluna de checkbox
+        df["Selecionar"] = df.index.to_series().apply(lambda i: st.checkbox("", key=f"checkbox_{i}"))
 
-        st.write(df[["Data", "Categoria", "Descrição", "Valor", "Selecionar"]])
+        # Exibe a tabela
+        st.dataframe(df[["Data", "Categoria", "Descrição", "Valor", "Selecionar"]])
 
         # Botão para remover faturas selecionadas
         if st.button("Remover Faturas Selecionadas"):
-            linhas_a_manter = df[df["Selecionar"] == False]["Linha"].tolist()
+            linhas_a_manter = df[~df["Selecionar"]]["Linha"].tolist()
             with open("faturas.txt", "w") as file:
                 for linha in linhas_a_manter:
                     file.write(linha + "\n")
