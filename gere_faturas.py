@@ -46,15 +46,20 @@ def insert():
     df = pd.DataFrame(faturas_remover)
 
     if not df.empty:
-        # Adiciona uma coluna de checkbox
-        df["Selecionar"] = df.index.to_series().apply(lambda i: st.checkbox("", key=f"checkbox_{i}"))
-
         # Exibe a tabela
-        st.dataframe(df[["Data", "Categoria", "Descrição", "Valor", "Selecionar"]])
+        st.write("Tabela de Faturas")
+        st.dataframe(df[["Data", "Categoria", "Descrição", "Valor"]])
 
-        # Botão para remover faturas selecionadas
+        st.write("Selecione as faturas a remover:")
+        selected_indices = st.multiselect(
+            "Faturas para remover:",
+            options=df.index,
+            format_func=lambda i: f"{df.iloc[i]['Data']} - {df.iloc[i]['Categoria']} - {df.iloc[i]['Descrição']} - {df.iloc[i]['Valor']}"
+        )
+
         if st.button("Remover Faturas Selecionadas"):
-            linhas_a_manter = df[~df["Selecionar"]]["Linha"].tolist()
+            # Remove as faturas selecionadas
+            linhas_a_manter = df.drop(selected_indices)["Linha"].tolist()
             with open("faturas.txt", "w") as file:
                 for linha in linhas_a_manter:
                     file.write(linha + "\n")
