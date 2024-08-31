@@ -36,12 +36,19 @@ def show():
     if st.button("Exibir Faturas"):
         faturas_filtradas = []
 
-        # Lê o arquivo de faturas e filtra com base no mês e na categoria selecionados
         with open("faturas.txt", "r") as file:
             for line in file:
                 parts = line.strip().split(", ")
+                
+                # Certifique-se de que há partes suficientes e que o formato é correto
+                if len(parts) < 4:
+                    continue  # Pula a linha se não tiver partes suficientes
+                
+                if len(parts[1]) < 10:
+                    continue  # Pula a linha se a parte 'Categoria' não tiver caracteres suficientes
+                
                 data = {
-                    "Mês": parts[0][6:],
+                    "Mês": parts[0][6:],  
                     "Categoria": parts[1][10:],  
                     "Descrição": parts[2][11:], 
                     "Valor": float(parts[3][7:])
@@ -50,7 +57,7 @@ def show():
                 if (mes_selecionado == "Todos os Meses" or mes_selecionado == data["Mês"]) and \
                    (categoria_selecionada == "Todas as Categorias" or categoria_selecionada == data["Categoria"]):
                     faturas_filtradas.append(data)
-        
+
         # Converte os dados filtrados para um DataFrame
         if faturas_filtradas:
             df = pd.DataFrame(faturas_filtradas)
