@@ -34,14 +34,25 @@ def insert():
     with open("faturas.txt", "r") as file:
         for line in file:
             parts = line.strip().split(", ")
-            data = {
-                "Linha": line.strip(),  # Armazena a linha completa para facilitar a remoção
-                "Data": parts[0][6:], 
-                "Categoria": parts[1][10:],  
-                "Descrição": parts[2][11:], 
-                "Valor": float(parts[3][7:])  
-            }
-            faturas_remover.append(data)
+            
+            # Verificações de segurança para evitar erros de índice ou corte de string
+            if len(parts) < 4:
+                continue  # Pula a linha se não tiver partes suficientes
+            
+            if len(parts[0]) < 6 or len(parts[1]) < 10 or len(parts[2]) < 11 or len(parts[3]) < 7:
+                continue  # Pula a linha se qualquer parte não tiver o comprimento mínimo esperado
+            
+            try:
+                data = {
+                    "Linha": line.strip(),  # Armazena a linha completa para facilitar a remoção
+                    "Data": parts[0][6:], 
+                    "Categoria": parts[1][10:],  
+                    "Descrição": parts[2][11:], 
+                    "Valor": float(parts[3][7:])
+                }
+                faturas_remover.append(data)
+            except ValueError:
+                continue  # Ignora a linha se ocorrer um erro de conversão de tipo
 
     df = pd.DataFrame(faturas_remover)
 
