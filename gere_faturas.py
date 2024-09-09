@@ -23,7 +23,7 @@ def insert():
         if descricao and valor:
             # Verifica se o valor contém uma vírgula e impede a adição
             if "," in valor:
-                st.error("Por favor, utilize ponto (.) como separador decimal, e não vírgula (,).")
+                st.error("Usar ponto (.) em vez da vírgula (,)")
             else:
                 try:
                     # Tenta converter o valor para float para garantir que é numérico
