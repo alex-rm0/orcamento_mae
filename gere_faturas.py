@@ -21,9 +21,20 @@ def insert():
 
     if st.button("Adicionar Fatura"):
         if descricao and valor:
-            with open("faturas.txt", "a") as file:
-                file.write(f"Data: {mes}, Categoria: {categoria}, Descrição: {descricao}, Valor: {valor}\n")
-            st.success("Fatura adicionada com sucesso!")
+            # Verifica se o valor contém uma vírgula e impede a adição
+            if "," in valor:
+                st.error("Por favor, utilize ponto (.) como separador decimal, e não vírgula (,).")
+            else:
+                try:
+                    # Tenta converter o valor para float para garantir que é numérico
+                    valor_float = float(valor)
+                    
+                    # Adiciona a fatura ao arquivo
+                    with open("faturas.txt", "a") as file:
+                        file.write(f"Data: {mes}, Categoria: {categoria}, Descrição: {descricao}, Valor: {valor_float}\n")
+                    st.success("Fatura adicionada com sucesso!")
+                except ValueError:
+                    st.error("Por favor, insira um valor numérico válido.")
         else:
             st.error("Por favor, preencha todos os campos.")
 
