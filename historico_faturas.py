@@ -47,15 +47,17 @@ def show():
                 if len(parts[1]) < 10:
                     continue  # Pula a linha se a parte 'Categoria' não tiver caracteres suficientes
                 
+                try:
+                    valor = float(parts[3][7:])  # Tenta converter o valor
+                except ValueError:
+                    st.warning(f"Valor inválido na linha: {line}")  # Exibe um aviso se o valor for inválido
+                    continue  # Pula para a próxima linha
+                
                 data = {
                     "Mês": parts[0][6:],  
                     "Categoria": parts[1][10:],  
                     "Descrição": parts[2][11:], 
-                    if valor = float(parts[3][7:]):
-                        continue
-                    else:
-                        #st.warning(f"Valor inválido na linha: {line}")  # Exibe um aviso se o valor for inválido
-                        continue  # Pula para a próxima linha
+                    "Valor": valor  # Usa o valor convertido
                 }
                 
                 if (mes_selecionado == "Todos os Meses" or mes_selecionado == data["Mês"]) and \
