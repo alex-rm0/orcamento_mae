@@ -51,7 +51,11 @@ def show():
                     "Mês": parts[0][6:],  
                     "Categoria": parts[1][10:],  
                     "Descrição": parts[2][11:], 
-                    "Valor": float(parts[3][7:])
+                    try:
+                        valor = float(parts[3][7:])  # Tenta converter o valor
+                    except ValueError:
+                        #st.warning(f"Valor inválido na linha: {line}")  # Exibe um aviso se o valor for inválido
+                        continue  # Pula para a próxima linha
                 }
                 
                 if (mes_selecionado == "Todos os Meses" or mes_selecionado == data["Mês"]) and \
