@@ -51,7 +51,7 @@ def show():
                     valor = float(parts[3][7:])  # Tenta converter o valor
                 except ValueError:
                     st.warning(f"Valor inválido na linha: {line}")  # Exibe um aviso se o valor for inválido
-                    continue  # Pula para a próxima linha
+                    continue
                 
                 data = {
                     "Mês": parts[0][6:],  
