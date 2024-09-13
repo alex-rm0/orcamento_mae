@@ -1,15 +1,10 @@
 import streamlit as st
 import pandas as pd
 
-# Função para exibir o histórico de faturas
 def show():
     st.subheader("Histórico de Faturas")
 
-    # Verifica se o session_state já contém faturas
-    if 'faturas' not in st.session_state:
-        st.session_state.faturas = []
-
-    # Opções de filtro por mês e categoria
+    # Opções de mês e categoria
     meses = ["Todos os Meses", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
     mes_selecionado = st.selectbox("Selecione o mês:", meses)
 
@@ -41,14 +36,33 @@ def show():
     if st.button("Exibir Faturas"):
         faturas_filtradas = []
 
-        # Filtra as faturas no session_state
-        for fatura in st.session_state.faturas:
-            mes_fatura = fatura["Data"]
-            categoria_fatura = fatura["Categoria"]
-
-            if (mes_selecionado == "Todos os Meses" or mes_selecionado == mes_fatura) and \
-               (categoria_selecionada == "Todas as Categorias" or categoria_selecionada == categoria_fatura):
-                faturas_filtradas.append(fatura)
+        with open("faturas.txt", "r") as file:
+            for line in file:
+                parts = line.strip().split(", ")
+                
+                # Certifique-se de que há partes suficientes e que o formato é correto
+                if len(parts) < 4:
+                    continue  # Pula a linha se não tiver partes suficientes
+                
+                if len(parts[1]) < 10:
+                    continue  # Pula a linha se a parte 'Categoria' não tiver caracteres suficientes
+                
+                try:
+                    valor = float(parts[3][7:])  # Tenta converter o valor
+                except ValueError:
+                    st.warning(f"Valor inválido na linha: {line}")  # Exibe um aviso se o valor for inválido
+                    continue
+                
+                data = {
+                    "Mês": parts[0][6:],  
+                    "Categoria": parts[1][10:],  
+                    "Descrição": parts[2][11:], 
+                    "Valor": valor  # Usa o valor convertido
+                }
+                
+                if (mes_selecionado == "Todos os Meses" or mes_selecionado == data["Mês"]) and \
+                   (categoria_selecionada == "Todas as Categorias" or categoria_selecionada == data["Categoria"]):
+                    faturas_filtradas.append(data)
 
         # Converte os dados filtrados para um DataFrame
         if faturas_filtradas:
