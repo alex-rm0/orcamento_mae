@@ -46,16 +46,15 @@ def insert():
         for line in file:
             parts = line.strip().split(", ")
             
-            # Verificações de segurança para evitar erros de índice ou corte de string
             if len(parts) < 4:
-                continue  # Pula a linha se não tiver partes suficientes
+                continue  
             
             if len(parts[0]) < 6 or len(parts[1]) < 10 or len(parts[2]) < 11 or len(parts[3]) < 7:
-                continue  # Pula a linha se qualquer parte não tiver o comprimento mínimo esperado
+                continue 
             
             try:
                 data = {
-                    "Linha": line.strip(),  # Armazena a linha completa para facilitar a remoção
+                    "Linha": line.strip(), 
                     "Data": parts[0][6:], 
                     "Categoria": parts[1][10:],  
                     "Descrição": parts[2][11:], 
